@@ -32,7 +32,7 @@ export default {
                 foreground: '#000000',
                 'secondary-foreground': '#000000',
                 'primary-foreground': '#FFFFFF',
-                primary: '#1E3A8A'
+                primary: '#3B5998'
             },
         },
     },
