@@ -1,7 +1,44 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
 import { Award, Target, Heart, Shield } from 'lucide-react';
+
+// Scroll Reveal Component
+type AnimatedElementProps = {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  direction?: 'up' | 'down' | 'left' | 'right';
+};
+
+const AnimatedElement: React.FC<AnimatedElementProps> = ({ children, className, delay = 0, direction = 'up' }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+
+  const getInitial = () => {
+    switch (direction) {
+      case 'up': return { opacity: 0, y: 40 };
+      case 'down': return { opacity: 0, y: -40 };
+      case 'left': return { opacity: 0, x: 40 };
+      case 'right': return { opacity: 0, x: -40 };
+      default: return { opacity: 0, y: 40 };
+    }
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={getInitial()}
+      animate={isInView ? { opacity: 1, x: 0, y: 0 } : getInitial()}
+      transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98], delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export default function AboutPage() {
   return (
@@ -21,12 +58,22 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10 text-center px-6">
-          <h1 className="font-heading text-5xl md:text-7xl font-bold text-primary-foreground uppercase tracking-tight mb-4">
+          <motion.h1 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="font-heading text-5xl md:text-7xl font-bold text-primary-foreground uppercase tracking-tight mb-4"
+          >
             About BuildPro
-          </h1>
-          <p className="font-paragraph text-xl text-primary-foreground/90 max-w-3xl mx-auto">
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98], delay: 0.2 }}
+            className="font-paragraph text-xl text-primary-foreground/90 max-w-3xl mx-auto"
+          >
             Building excellence since 1995
-          </p>
+          </motion.p>
         </div>
       </section>
 
@@ -34,7 +81,7 @@ export default function AboutPage() {
       <section className="py-24 bg-background">
         <div className="max-w-[120rem] mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <AnimatedElement direction="left">
               <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-6">
                 Our Story
               </h2>
@@ -49,36 +96,68 @@ export default function AboutPage() {
                   Today, BuildPro stands as a testament to what dedication, skilled craftsmanship, and strong values can achieve. We continue to push boundaries, embrace innovation, and set new standards in the construction industry.
                 </p>
               </div>
-            </div>
+            </AnimatedElement>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_9b1561460c7b487aa7a5adfdc811708f~mv2.png?originWidth=384&originHeight=384"
-                  alt="Modern commercial building"
-                  className="w-full h-64 object-cover"
-                  width={400}
-                />
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_e1a73cf6ad6946dba51b75e149b99298~mv2.png?originWidth=384&originHeight=384"
-                  alt="Residential construction project"
-                  className="w-full h-48 object-cover"
-                  width={400}
-                />
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                  className="overflow-hidden"
+                >
+                  <Image
+                    src="https://static.wixstatic.com/media/477ab0_9b1561460c7b487aa7a5adfdc811708f~mv2.png?originWidth=384&originHeight=384"
+                    alt="Modern commercial building"
+                    className="w-full h-64 object-cover"
+                    width={400}
+                  />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  viewport={{ once: true }}
+                  className="overflow-hidden"
+                >
+                  <Image
+                    src="https://static.wixstatic.com/media/477ab0_e1a73cf6ad6946dba51b75e149b99298~mv2.png?originWidth=384&originHeight=384"
+                    alt="Residential construction project"
+                    className="w-full h-48 object-cover"
+                    width={400}
+                  />
+                </motion.div>
               </div>
               <div className="space-y-4 pt-8">
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_4f432b9e665b45e9a9c2c914bec88962~mv2.png?originWidth=384&originHeight=384"
-                  alt="Interior renovation work"
-                  className="w-full h-48 object-cover"
-                  width={400}
-                />
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_c84c4a03d3424556910597d64241dadc~mv2.png?originWidth=384&originHeight=384"
-                  alt="Construction site overview"
-                  className="w-full h-64 object-cover"
-                  width={400}
-                />
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="overflow-hidden"
+                >
+                  <Image
+                    src="https://static.wixstatic.com/media/477ab0_4f432b9e665b45e9a9c2c914bec88962~mv2.png?originWidth=384&originHeight=384"
+                    alt="Interior renovation work"
+                    className="w-full h-48 object-cover"
+                    width={400}
+                  />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  className="overflow-hidden"
+                >
+                  <Image
+                    src="https://static.wixstatic.com/media/477ab0_c84c4a03d3424556910597d64241dadc~mv2.png?originWidth=384&originHeight=384"
+                    alt="Construction site overview"
+                    className="w-full h-64 object-cover"
+                    width={400}
+                  />
+                </motion.div>
               </div>
             </div>
           </div>
@@ -89,22 +168,23 @@ export default function AboutPage() {
       <section className="py-24 bg-primary text-primary-foreground">
         <div className="max-w-[120rem] mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="font-heading text-6xl font-bold text-secondary mb-2">30+</div>
-              <p className="font-paragraph text-lg">Years of Experience</p>
-            </div>
-            <div>
-              <div className="font-heading text-6xl font-bold text-secondary mb-2">500+</div>
-              <p className="font-paragraph text-lg">Projects Completed</p>
-            </div>
-            <div>
-              <div className="font-heading text-6xl font-bold text-secondary mb-2">98%</div>
-              <p className="font-paragraph text-lg">On-Time Delivery</p>
-            </div>
-            <div>
-              <div className="font-heading text-6xl font-bold text-secondary mb-2">100%</div>
-              <p className="font-paragraph text-lg">Client Satisfaction</p>
-            </div>
+            {[
+              { value: '30+', label: 'Years of Experience' },
+              { value: '500+', label: 'Projects Completed' },
+              { value: '98%', label: 'On-Time Delivery' },
+              { value: '100%', label: 'Client Satisfaction' },
+            ].map((stat, index) => (
+              <AnimatedElement key={stat.label} delay={index * 0.15}>
+                <motion.div
+                  whileInView={{ scale: 1.05 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="font-heading text-6xl font-bold text-secondary mb-2">{stat.value}</div>
+                  <p className="font-paragraph text-lg">{stat.label}</p>
+                </motion.div>
+              </AnimatedElement>
+            ))}
           </div>
         </div>
       </section>
@@ -113,12 +193,14 @@ export default function AboutPage() {
       <section className="py-24 bg-background">
         <div className="max-w-[120rem] mx-auto px-6 lg:px-12">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-8">
-              Our Mission
-            </h2>
-            <p className="font-paragraph text-xl text-foreground/80 leading-relaxed">
-              To deliver exceptional construction services that exceed client expectations through quality craftsmanship, innovative solutions, and unwavering commitment to safety and sustainability. We build not just structures, but lasting relationships and thriving communities.
-            </p>
+            <AnimatedElement>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-8">
+                Our Mission
+              </h2>
+              <p className="font-paragraph text-xl text-foreground/80 leading-relaxed">
+                To deliver exceptional construction services that exceed client expectations through quality craftsmanship, innovative solutions, and unwavering commitment to safety and sustainability. We build not just structures, but lasting relationships and thriving communities.
+              </p>
+            </AnimatedElement>
           </div>
         </div>
       </section>
@@ -127,62 +209,43 @@ export default function AboutPage() {
       <section className="py-24 bg-light-grey/30">
         <div className="max-w-[120rem] mx-auto px-6 lg:px-12">
           <div className="text-center mb-16">
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-4">
-              Our Core Values
-            </h2>
-            <p className="font-paragraph text-lg text-foreground/80 max-w-3xl mx-auto">
-              The principles that guide everything we do
-            </p>
+            <AnimatedElement>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-4">
+                Our Core Values
+              </h2>
+              <p className="font-paragraph text-lg text-foreground/80 max-w-3xl mx-auto">
+                The principles that guide everything we do
+              </p>
+            </AnimatedElement>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-background p-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary mb-6">
-                <Award size={32} className="text-secondary-foreground" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-4">
-                Excellence
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                We strive for the highest standards in every project, ensuring superior quality and craftsmanship in all our work.
-              </p>
-            </div>
-
-            <div className="bg-background p-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary mb-6">
-                <Shield size={32} className="text-secondary-foreground" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-4">
-                Integrity
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                Honesty, transparency, and ethical practices form the foundation of our business relationships and operations.
-              </p>
-            </div>
-
-            <div className="bg-background p-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary mb-6">
-                <Target size={32} className="text-secondary-foreground" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-4">
-                Reliability
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                We deliver on our promises, meeting deadlines and budgets while maintaining the highest quality standards.
-              </p>
-            </div>
-
-            <div className="bg-background p-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary mb-6">
-                <Heart size={32} className="text-secondary-foreground" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-4">
-                Client Focus
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                Your vision and satisfaction drive everything we do. We listen, collaborate, and deliver results that exceed expectations.
-              </p>
-            </div>
+            {[
+              { icon: Award, title: 'Excellence', description: 'We strive for the highest standards in every project, ensuring superior quality and craftsmanship in all our work.' },
+              { icon: Shield, title: 'Integrity', description: 'Honesty, transparency, and ethical practices form the foundation of our business relationships and operations.' },
+              { icon: Target, title: 'Reliability', description: 'We deliver on our promises, meeting deadlines and budgets while maintaining the highest quality standards.' },
+              { icon: Heart, title: 'Client Focus', description: 'Your vision and satisfaction drive everything we do. We listen, collaborate, and deliver results that exceed expectations.' },
+            ].map((value, index) => (
+              <AnimatedElement key={value.title} delay={index * 0.1}>
+                <motion.div 
+                  whileHover={{ y: -8 }}
+                  className="bg-background p-8 text-center h-full flex flex-col justify-center"
+                >
+                  <motion.div 
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                    className="inline-flex items-center justify-center w-16 h-16 bg-secondary mb-6 mx-auto"
+                  >
+                    <value.icon size={32} className="text-secondary-foreground" />
+                  </motion.div>
+                  <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-4">
+                    {value.title}
+                  </h3>
+                  <p className="font-paragraph text-base text-foreground/80">
+                    {value.description}
+                  </p>
+                </motion.div>
+              </AnimatedElement>
+            ))}
           </div>
         </div>
       </section>
@@ -191,65 +254,50 @@ export default function AboutPage() {
       <section className="py-24 bg-background">
         <div className="max-w-[120rem] mx-auto px-6 lg:px-12">
           <div className="text-center mb-16">
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-4">
-              Our Expert Team
-            </h2>
-            <p className="font-paragraph text-lg text-foreground/80 max-w-3xl mx-auto">
-              Skilled professionals dedicated to bringing your vision to life
-            </p>
+            <AnimatedElement>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary uppercase mb-4">
+                Our Expert Team
+              </h2>
+              <p className="font-paragraph text-lg text-foreground/80 max-w-3xl mx-auto">
+                Skilled professionals dedicated to bringing your vision to life
+              </p>
+            </AnimatedElement>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="mb-6 overflow-hidden">
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_d72d1fc4fc504b0fb9a45c4825fa96c9~mv2.png?originWidth=384&originHeight=384"
-                  alt="Project Manager"
-                  className="w-full h-80 object-cover"
-                  width={400}
-                />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-2">
-                Licensed Contractors
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                Certified professionals with decades of combined experience in residential and commercial construction.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="mb-6 overflow-hidden">
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_38094cdc24e94465850a9e8305908775~mv2.png?originWidth=384&originHeight=384"
-                  alt="Skilled craftsmen"
-                  className="w-full h-80 object-cover"
-                  width={400}
-                />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-2">
-                Skilled Craftsmen
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                Master tradespeople committed to precision, quality, and safety in every aspect of construction.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="mb-6 overflow-hidden">
-                <Image
-                  src="https://static.wixstatic.com/media/477ab0_607f5d0e42d34348a0db4b0d081d05ae~mv2.png?originWidth=384&originHeight=384"
-                  alt="Project coordinators"
-                  className="w-full h-80 object-cover"
-                  width={400}
-                />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-2">
-                Project Coordinators
-              </h3>
-              <p className="font-paragraph text-base text-foreground/80">
-                Dedicated managers ensuring seamless communication, scheduling, and execution of your project.
-              </p>
-            </div>
+            {[
+              { image: 'https://static.wixstatic.com/media/477ab0_d72d1fc4fc504b0fb9a45c4825fa96c9~mv2.png?originWidth=384&originHeight=384', title: 'Licensed Contractors', description: 'Certified professionals with decades of combined experience in residential and commercial construction.' },
+              { image: 'https://static.wixstatic.com/media/477ab0_38094cdc24e94465850a9e8305908775~mv2.png?originWidth=384&originHeight=384', title: 'Skilled Craftsmen', description: 'Master tradespeople committed to precision, quality, and safety in every aspect of construction.' },
+              { image: 'https://static.wixstatic.com/media/477ab0_607f5d0e42d34348a0db4b0d081d05ae~mv2.png?originWidth=384&originHeight=384', title: 'Project Coordinators', description: 'Dedicated managers ensuring seamless communication, scheduling, and execution of your project.' },
+            ].map((member, index) => (
+              <AnimatedElement key={member.title} delay={index * 0.15}>
+                <motion.div 
+                  whileHover={{ y: -8 }}
+                  className="text-center"
+                >
+                  <div className="mb-6 overflow-hidden">
+                    <motion.div
+                      whileHover={{ scale: 1.08 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-full"
+                    >
+                      <Image
+                        src={member.image}
+                        alt={member.title}
+                        className="w-full h-80 object-cover"
+                        width={400}
+                      />
+                    </motion.div>
+                  </div>
+                  <h3 className="font-heading text-2xl font-bold text-primary uppercase mb-2">
+                    {member.title}
+                  </h3>
+                  <p className="font-paragraph text-base text-foreground/80">
+                    {member.description}
+                  </p>
+                </motion.div>
+              </AnimatedElement>
+            ))}
           </div>
         </div>
       </section>
